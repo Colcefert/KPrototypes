@@ -1,7 +1,11 @@
 package com.company;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.FileReader;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.company.Utils.CentersReader;
 import com.company.Utils.TwoDPointFileInputFormat;
@@ -33,10 +37,12 @@ public class KMeans {
             Scanner reader = new Scanner(new FileReader(centerfile));
 
             while (reader.hasNext()) {
-                int pos = reader.nextInt();
-
-                centroids.add(reader.nextFloat());
-                centroids.add(reader.nextFloat());
+                String s = reader.nextLine();
+                String[] cs = s.split("\\s+");
+                for(int i = 1; i < cs.length; i++) {
+                    System.out.println(new Float(cs[i]));
+                    centroids.add(new Float(cs[i]));
+                }
             }
         }
 
@@ -55,12 +61,12 @@ public class KMeans {
                 FloatWritable Y = value.gety();
                 float x = X.get();
                 float y = Y.get();
-                distance = ( x-x_c)*(x-x_c) +
-                        (y - y_c)*(y-y_c);
-                if ( distance < mindistance ) {
+                distance = (x - x_c)*(x - x_c) + (y - y_c)*(y - y_c);
+                if (distance < mindistance) {
                     mindistance = distance;
                     winnercentroid=i;
                 }
+                i++;
             }
 
             IntWritable winnerCentroid = new IntWritable(winnercentroid);
@@ -100,9 +106,9 @@ public class KMeans {
 
 
     public static void main(String[] args) throws Exception {
-        String data = "/.../project/inFiles/data.txt";
-        String IN = "/.../project/centers/centers.txt";
-        String OUT = "/.../project/outFiles/outFiles";
+        String data = "/home/rvr/Documents/untitled2/inFiles/data.txt";
+        String IN = "/home/rvr/Documents/untitled2/centers/centers.txt";
+        String OUT = "/home/rvr/Documents/untitled2/outFiles/outFiles";
         String input = "";
         String output = OUT + System.nanoTime();
 
