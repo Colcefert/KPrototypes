@@ -3,45 +3,47 @@ package com.company.Utils;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Writable;
 
 
 public class TwoDPointWritable implements Writable {
 
-    private FloatWritable x,y;
+    private ArrayList<FloatWritable> fl;
 
     public TwoDPointWritable() {
-        this.x = new FloatWritable();
-        this.y = new FloatWritable();
+        fl = new ArrayList<FloatWritable>();
     }
 
-    public void set ( float a, float b)
+    public void set (Float ... args)
     {
-        this.x.set(a);
-        this.y.set(b);
+        for(Float f1 : args){
+            fl.add(new FloatWritable(f1));
+        }
     }
 
 
-    @Override
-    public void readFields(DataInput in) throws IOException {
-        x.readFields(in);
-        y.readFields(in);
-    }
-
-    @Override
     public void write(DataOutput out) throws IOException {
-        x.write(out);
-        y.write(out);
+        for (FloatWritable flw : fl) {
+            flw.write(out);
+        }
+    }
+
+    public void readFields(DataInput in) throws IOException {
+        int i = 0;
+        fl.clear();
+        while(i < 2) {
+            FloatWritable atom = new FloatWritable();
+            atom.readFields(in);
+            fl.add(atom);
+            i++;
+        }
     }
 
 
-    public FloatWritable getx() {
-        return x;
+    public ArrayList<FloatWritable> getData() {
+        return fl;
     }
-
-    public FloatWritable gety() {
-        return y;
-    }
-
 }

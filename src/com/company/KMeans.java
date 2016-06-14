@@ -57,10 +57,10 @@ public class KMeans {
             while (it.hasNext()){
                 float x_c = it.next();
                 float y_c = it.next();
-                FloatWritable X = value.getx();
-                FloatWritable Y = value.gety();
-                float x = X.get();
-                float y = Y.get();
+                ArrayList<FloatWritable> points = value.getData();
+                float x = points.get(0).get();
+                float y = points.get(1).get();
+
                 distance = (x - x_c)*(x - x_c) + (y - y_c)*(y - y_c);
                 if (distance < mindistance) {
                     mindistance = distance;
@@ -88,10 +88,10 @@ public class KMeans {
             float centery=0.0f;
             for (TwoDPointWritable point : points) {
                 num++;
-                FloatWritable X = point.getx();
-                FloatWritable Y = point.gety();
-                float x = X.get();
-                float y = Y.get();
+                ArrayList<FloatWritable> tpoints = point.getData();
+                float x = tpoints.get(0).get();
+                float y = tpoints.get(1).get();
+                System.out.println(x + " " + y);
                 centerx += x;
                 centery += y;
             }

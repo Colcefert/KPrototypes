@@ -2,6 +2,7 @@ package com.company.Utils;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.apache.hadoop.io.LongWritable;
@@ -31,10 +32,13 @@ public class TwoDPointFileRecordReader  extends RecordReader<LongWritable, TwoDP
             return false;
         }
         Scanner reader  = new Scanner (new StringReader(lineReader.getCurrentValue().toString()));
-        float x = reader.nextFloat();
-        float y = reader.nextFloat();
+        ArrayList<Float> tempData = new ArrayList<>();
+        while(reader.hasNext()) {
+            tempData.add(reader.nextFloat());
+        }
+        Float[] temp = new Float[tempData.size()];
         value = new TwoDPointWritable();
-        value.set(x,y);
+        value.set(tempData.toArray(temp));
         return true;
     }
 
